@@ -55,7 +55,7 @@ func main() {
 func Call(m map[string]interface{}, name string, params []string) (result []reflect.Value, err error) {
 	f := reflect.ValueOf(m[name])
 	if f.IsValid() != true {
-		err = errors.New("We don't know how to do that... OMG.")
+		err = errors.New("We don't know how to do that... Help!")
 		print(err.Error())
 		return
 	}
