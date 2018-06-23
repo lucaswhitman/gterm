@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	drive "google.golang.org/api/drive/v2"
+	drive "google.golang.org/api/drive/v3"
 )
 
 type Functions struct {
@@ -38,11 +38,11 @@ func ls() {
 		log.Fatalf("Unable to retrieve files: %v", err)
 	}
 	fmt.Println("Files:")
-	if len(r.Items) == 0 {
+	if len(r.Files) == 0 {
 		fmt.Println("No files found.")
 	} else {
-		for _, i := range r.Items {
-			fmt.Printf("%s (%s)\n", i.Title, i.Id)
+		for _, i := range r.Files {
+			fmt.Printf("%s (%s)\n", i.Name, i.Id)
 		}
 	}
 }
@@ -50,22 +50,22 @@ func ls() {
 // test function for working with APIs
 func foo() {
 	// this is currently hardcoded to my own "My Drive", still trying to figure out how to get this programatically
-	r, err := service.Files.List().MaxResults(2000).Q("'0AExqA7NOpVhmUk9PVA' in parents").Do()
+	r, err := service.Files.List().Q("'0AExqA7NOpVhmUk9PVA' in parents").Do()
 
 	if err != nil {
 		log.Fatalf("Unable to retrieve files: %v", err)
 	}
 	fmt.Println("Files:")
-	if len(r.Items) == 0 {
+	if len(r.Files) == 0 {
 		fmt.Println("No files found.")
 	} else {
-		for _, i := range r.Items {
-			fmt.Printf("%s (%s) %s %s %s\n", i.Title, i.Id, i.Kind, i.TeamDriveId, i.MimeType)
-			/*
-				for _, i := range i.Parents {
-					fmt.Printf("%t (%s) (%s) (%s) (%s) (%s)\n", i.IsRoot, i.Id, i.Header, i.ParentLink, i.SelfLink, i.Kind)
-				}
-			*/
+		for _, i := range r.Files {
+			fmt.Printf("%s (%s) %s %s %s\n", i.Name, i.Id, i.Kind, i.TeamDriveId, i.MimeType)
+
+			for _, i := range i.Parents {
+				fmt.Printf("%s\n", i)
+			}
+
 		}
 	}
 }
